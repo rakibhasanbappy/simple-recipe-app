@@ -2,7 +2,7 @@
   "name": "simple_recipe_app",
   "version": "1.0.0",
   "description": "This is a simple recipe app using nodejs and postgresql",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/rakibhasanbappy/simple-recipe-app/issues"
   },
-  "homepage": "https://github.com/rakibhasanbappy/simple-recipe-app#readme"
+  "homepage": "https://github.com/rakibhasanbappy/simple-recipe-app#readme",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "pg": "^8.11.5"
+  }
 }
