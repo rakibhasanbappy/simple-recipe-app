@@ -1,6 +1,8 @@
-const routes = {
-    // about: aboutUsHandler,
-    // sample: sampleHandler,
-}
+// dependencies
+const { recipeHandler } = require('./handlers/recipeHandler');
 
-module.export = routes;
+const routes = {
+    recipe: recipeHandler,
+};
+
+module.exports = routes;

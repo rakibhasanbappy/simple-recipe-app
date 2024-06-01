@@ -2,6 +2,8 @@
 const url = require('url');
 const { StringDecoder } = require('string_decoder');
 const routes = require('../routes');
+const notFoundHandler = require('../handlers/notFoundHandler');
+const utilities = require('./utilities');
 
 //module scaffolding
 const handler = {};
@@ -31,6 +33,7 @@ handler.handleReqRes = (req, res) =>{
     const chosenHandler = routes[trimmedPath] ? routes[trimmedPath] : notFoundHandler;
 
 
+
     req.on('data', (buffer)=>{
         realData += decoder.write(buffer);
     });
@@ -38,10 +41,19 @@ handler.handleReqRes = (req, res) =>{
     req.on('end',()=>{
         realData += decoder.end();
 
-        // return the final response
-        res.setHeader('Content-type', 'application/json');
-        // res.writeHead(statusCode);
-        // res.end(payloadString);
+        requestProperties.body = utilities.parsedJSON(realData);
+
+        chosenHandler(requestProperties, (status, payload)=>{
+            const statusCode = typeof status === 'number' ? status : 500; 
+            const responsePayload = typeof payload === 'object' ? payload : {};
+
+            const payloadString = JSON.stringify(responsePayload);
+
+            // return the final response
+            res.setHeader('Content-type', 'application/json');
+            res.writeHead(statusCode);
+            res.end(payloadString);
+        });
     });
 
 };
