@@ -1,7 +1,9 @@
+// dependencies
 const { Client } = require('pg');
 require('dotenv').config();
 
-module.exports.getClient = async () => {
+
+const getClient = () => {
   const client = new Client({
     host: process.env.PG_HOST,
     port: process.env.PG_PORT,
@@ -10,6 +12,10 @@ module.exports.getClient = async () => {
     database: process.env.PG_DATABASE,
     ssl: false,
   });
-  await client.connect();
+  client.connect();
   return client;
 };
+
+
+// export the module
+module.exports = getClient;

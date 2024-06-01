@@ -1,4 +1,5 @@
 // dependencies
+const db_operations = require('../db/db_operation');
 
 // module scaffolding
 const handler = {};
@@ -28,8 +29,13 @@ handler._recipes.post = (requestProperties, callback) => {
     const directions = typeof requestProperties.body.directions === 'string' && requestProperties.body.directions.length > 0 ? requestProperties.body.directions : false;
 
     if(name && ingredients && directions){
-        // eikhane database er query call kora lagbe
-        console.log("post request hoise");
+        
+        const data = {
+            name,
+            ingredients,
+            directions,
+        };
+        db_operations.db_create(data, callback);
     } else{
         callback(400, { // 400 Bad Request
             error: 'You have a problem in your request!',
@@ -40,10 +46,12 @@ handler._recipes.post = (requestProperties, callback) => {
 
 handler._recipes.get = (requestProperties, callback) => {
     
-    const id = typeof requestProperties.queryStringObject.id === 'number' ? requestProperties.queryStringObject.id : false;
+    let id = Number(requestProperties.queryStringObject.id);
+    
+    id = typeof id === 'number' ? id : false;
 
     if(id){
-        // eikhane ei id er against er data read korar sql query likha lagbe
+        db_operations.db_read(id, callback);
     }else{
         callback(404, {
             error: 'Recipe Not Found!',
@@ -53,6 +61,10 @@ handler._recipes.get = (requestProperties, callback) => {
 
 handler._recipes.put = (requestProperties, callback) => {
     
+    let id = Number(requestProperties.queryStringObject.id);
+    
+    id = typeof id === 'number' ? id : false;
+    
     const name = typeof requestProperties.body.name === 'string' && requestProperties.body.name.length > 0 ? requestProperties.body.name : false;
 
 
@@ -61,9 +73,17 @@ handler._recipes.put = (requestProperties, callback) => {
 
     const directions = typeof requestProperties.body.directions === 'string' && requestProperties.body.directions.length > 0 ? requestProperties.body.directions : false;
 
-    if(name && ingredients && directions){
-        // eikhane database er query call kora lagbe
-        console.log("put request hoise");
+
+    if(name && ingredients && directions && id){
+        
+        const data = {
+            id,
+            name,
+            ingredients,
+            directions,
+        };
+        db_operations.db_update(data, callback);
+
     } else{
         callback(400, { // 400 Bad Request
             error: 'You have a problem in your request!',
@@ -73,11 +93,13 @@ handler._recipes.put = (requestProperties, callback) => {
 }
 
 handler._recipes.delete = (requestProperties, callback) => {
-    const id = typeof requestProperties.queryStringObject.id === 'number' ? requestProperties.queryStringObject.id : false;
+    
+    let id = Number(requestProperties.queryStringObject.id);
+    
+    id = typeof id === 'number' ? id : false;
 
     if(id){
-        // eikhane ei id er against er data delete korar sql query likha lagbe
-        
+        db_operations.db_delete(id, callback);
     }else{
         callback(404, {
             error: 'Recipe Not Found!',
