@@ -4,6 +4,7 @@
   "description": "This is a simple recipe app using nodejs and postgresql",
   "main": "app.js",
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
